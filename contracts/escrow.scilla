@@ -1,0 +1,94 @@
+scilla_version 0
+
+library EscrowLib
+
+let nilMessage = Nil {Message}
+let zeroByStr20 = 0x0000000000000000000000000000000000000000
+let true = True
+
+let oneMsg =
+  fun(msg: Message) =>
+    Cons {Message} msg nilMessage
+
+let eError =
+  fun(message: String) =>
+    {_eventname: "Error"; message: message}
+
+let eSuccess = {_eventname: "Success"}
+
+contract Escrow(
+  registry: ByStr20, 
+  seller: ByStr20, 
+  buyer: ByStr32, 
+  escrowedNode: ByStr32,
+  price: Uint128
+)
+
+field sold: Bool = False
+field funderTmp: ByStr20 = zeroByStr20
+
+transition buy()
+  funderTmp := _sender;
+
+  okAmount = builtin eq price _amount;
+
+  match okAmount with
+  | True =>
+    accept;
+    msgs =
+      let m = {
+        _tag: "transfer"; 
+        _recipient: registry; 
+        _amount: Uint128 0;
+        node: escrowedNode; 
+        owner: _sender
+      } in oneMsg m;
+    send msgs
+  | False =>
+    e = let m = "Bad _amount" in eError m;
+    event e
+  end
+end
+
+transition onTransferSuccess(node: ByStr32, owner: ByStr20)
+  okSender = builtin eq _sender registry;
+
+  match okSender with
+  | True => 
+    sold := true;
+
+    e = eSuccess;
+    event e;
+  
+    balance <- _balance;
+    msgs =
+      let m = {
+        _tag: "onEscrowSuccess"; 
+        _recipient: seller; 
+        _amount: price
+      } in oneMsg m;
+    send msgs
+  | False =>
+    e = let m = "Bad _sender" in eError m;
+    event e
+  end
+end
+
+transition onTransferFailure(node: ByStr32, owner: ByStr20)
+  okSender = builtin eq _sender registry;
+
+  match okSender with
+  | True =>
+    funder <- funderTmp;
+    msgs =
+      let m = {
+        _tag: "onEscrowFailure"; 
+        _recipient: funder; 
+        _amount: price
+      } in oneMsg m;
+    send msgs
+  | False =>
+    e = let m = "Bad _sender" in eError m;
+    event e
+  end
+end
