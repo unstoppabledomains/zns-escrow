@@ -22,20 +22,52 @@ zns-escrow --help
 
 ### Example
 
-First deploy a contract.
+#### Sellers
+
+Deploy escrow and deposit domain.
 
 ```
-seller_address=0x1234567890123456789012345678901234567890
+buyer_address=0x1234567890123456789012345678901234567890
 seller_private_key=$(cat seller_private_key.txt)
+domain=any.zil
+
+zns-escrow sell \
+  --domain $domain \
+  --buyer $buyer_address \
+  --price 1 --qa \
+  --private-key $seller_private_key
+```
+
+##### Or if you want to separate these steps.
+
+Deploy the contract.
+
+```
+buyer_address=0x1234567890123456789012345678901234567890
+seller_private_key=$(cat seller_private_key.txt)
+domain=any.zil
 
 zns-escrow deploy \
-  --seller $seller_address \
+  --domain $domain \
+  --buyer $buyer_address \
   --price 1 --qa \
-  --private-key $seller_private_key \
-  --testnet
+  --private-key $seller_private_key
 ```
 
-Then the buyer can claim the domain like this.
+Then escrow the domain.
+
+```
+escrow_address=0x1234567890123456789012345678901234567890
+seller_private_key=$(cat seller_private_key.txt)
+
+zns-escrow deposit \
+  --escrow-address $escrow_address \
+  --private-key $seller_private_key
+```
+
+#### Buyers
+
+Purchase an escrowed domain.
 
 ```
 escrow_address=0x1234567890123456789012345678901234567890
@@ -43,8 +75,7 @@ buyer_private_key=$(cat buyer_private_key.txt)
 
 zns-escrow buy \
   --escrow-address $escrow_address \
-  --private-key $buyer_private_key \
-  --testnet
+  --private-key $buyer_private_key
 ```
 
 ## Additional Information
