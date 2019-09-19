@@ -1,1 +1,2 @@
-// TODO: Make a cli
+#!/usr/bin/env node
+require('../build');

@@ -23,5 +23,21 @@
   "author": {
     "name": "Braden Pezeshki",
     "email": "braden@unstoppabledomains.com"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "@zilliqa-js/zilliqa": "^0.8.0-alpha.0",
+    "chalk": "^2.4.2",
+    "namicorn": "^0.2.26",
+    "tslib": "^1.10.0",
+    "yargs": "^14.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "10",
+    "@types/yargs": "^13.0.2",
+    "typescript": "^3.6.3"
   }
 }
