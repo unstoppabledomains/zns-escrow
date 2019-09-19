@@ -16,8 +16,12 @@
     "type": "git",
     "url": "https://github.com/unstoppabledomains/zns-escrow.git"
   },
+  "homepage": "https://github.com/unstoppabledomains/zns-escrow/blob/master/README.md",
   "bin": {
     "zns-escrow": "bin/cli.js"
   },
-  "author": {}
+  "author": {
+    "name": "Braden Pezeshki",
+    "email": "braden@unstoppabledomains.com"
+  }
 }
