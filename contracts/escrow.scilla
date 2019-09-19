@@ -3,7 +3,6 @@ scilla_version 0
 library EscrowLib
 
 let nilMessage = Nil {Message}
-let zeroByStr20 = 0x0000000000000000000000000000000000000000
 let true = True
 
 let oneMsg =
@@ -25,7 +24,7 @@ contract Escrow(
 )
 
 field sold: Bool = False
-field funderTmp: ByStr20 = zeroByStr20
+field funderTmp: ByStr20 = 0x0000000000000000000000000000000000000000
 
 transition buy()
   funderTmp := _sender;
@@ -35,6 +34,7 @@ transition buy()
   match okAmount with
   | True =>
     accept;
+
     msgs =
       let m = {
         _tag: "transfer"; 
@@ -57,10 +57,10 @@ transition onTransferSuccess(node: ByStr32, owner: ByStr20)
   | True => 
     sold := true;
 
-    e = eSuccess;
-    event e;
-  
+    event eSuccess;
+
     balance <- _balance;
+
     msgs =
       let m = {
         _tag: "onEscrowSuccess"; 
@@ -80,6 +80,7 @@ transition onTransferFailure(node: ByStr32, owner: ByStr20)
   match okSender with
   | True =>
     funder <- funderTmp;
+
     msgs =
       let m = {
         _tag: "onEscrowFailure"; 
