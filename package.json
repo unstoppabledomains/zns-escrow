@@ -1,0 +1,23 @@
+{
+  "name": "zns-escrow",
+  "version": "0.0.0",
+  "license": "./LICENSE",
+  "keywords": [
+    "zns",
+    "crypto",
+    "currency",
+    "trade",
+    "escrow",
+    "zilliqa",
+    "scilla"
+  ],
+  "description": "Contracts and tools to help trade ZNS domains.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unstoppabledomains/zns-escrow.git"
+  },
+  "bin": {
+    "zns-escrow": "bin/cli.js"
+  },
+  "author": {}
+}
