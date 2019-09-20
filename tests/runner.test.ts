@@ -67,6 +67,11 @@ function createState({
       value: _balance.toString(),
     },
     {
+      vname: 'id',
+      type: 'String',
+      value: 'udc:escrow:1',
+    },
+    {
       vname: 'sold',
       type: 'Bool',
       value: {

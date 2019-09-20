@@ -4,7 +4,7 @@ exports[`should buy: buy_success 1`] = `
 Object {
   "_accepted": "true",
   "events": Array [],
-  "gas_remaining": "9641",
+  "gas_remaining": "9640",
   "message": Object {
     "_amount": "0",
     "_recipient": "0x3333333333333333333333333333333333333333",
@@ -35,6 +35,11 @@ Object {
       "vname": "funderTmp",
     },
     Object {
+      "type": "String",
+      "value": "udc:escrow:1",
+      "vname": "id",
+    },
+    Object {
       "type": "Bool",
       "value": Object {
         "argtypes": Array [],
@@ -62,7 +67,7 @@ Object {
       ],
     },
   ],
-  "gas_remaining": "9567",
+  "gas_remaining": "9566",
   "message": null,
   "scilla_major_version": "0",
   "states": Array [
@@ -70,6 +75,11 @@ Object {
       "type": "Uint128",
       "value": "0",
       "vname": "_balance",
+    },
+    Object {
+      "type": "String",
+      "value": "udc:escrow:1",
+      "vname": "id",
     },
     Object {
       "type": "Bool",
@@ -104,7 +114,7 @@ Object {
       ],
     },
   ],
-  "gas_remaining": "9567",
+  "gas_remaining": "9566",
   "message": null,
   "scilla_major_version": "0",
   "states": Array [
@@ -112,6 +122,11 @@ Object {
       "type": "Uint128",
       "value": "0",
       "vname": "_balance",
+    },
+    Object {
+      "type": "String",
+      "value": "udc:escrow:1",
+      "vname": "id",
     },
     Object {
       "type": "Bool",
@@ -146,7 +161,7 @@ Object {
       ],
     },
   ],
-  "gas_remaining": "9791",
+  "gas_remaining": "9790",
   "message": null,
   "scilla_major_version": "0",
   "states": Array [
@@ -154,6 +169,11 @@ Object {
       "type": "Uint128",
       "value": "0",
       "vname": "_balance",
+    },
+    Object {
+      "type": "String",
+      "value": "udc:escrow:1",
+      "vname": "id",
     },
     Object {
       "type": "Bool",
@@ -182,7 +202,7 @@ Object {
       "params": Array [],
     },
   ],
-  "gas_remaining": "9474",
+  "gas_remaining": "9473",
   "message": Object {
     "_amount": "10",
     "_recipient": "0x1111111111111111111111111111111111111111",
@@ -206,6 +226,11 @@ Object {
       "vname": "sold",
     },
     Object {
+      "type": "String",
+      "value": "udc:escrow:1",
+      "vname": "id",
+    },
+    Object {
       "type": "ByStr20",
       "value": "0x5555555555555555555555555555555555555555",
       "vname": "funderTmp",
@@ -218,7 +243,7 @@ exports[`should refund on transfer fail: onTransferFailure_success 1`] = `
 Object {
   "_accepted": "false",
   "events": Array [],
-  "gas_remaining": "9511",
+  "gas_remaining": "9510",
   "message": Object {
     "_amount": "10",
     "_recipient": "0x5555555555555555555555555555555555555555",
@@ -231,6 +256,11 @@ Object {
       "type": "Uint128",
       "value": "0",
       "vname": "_balance",
+    },
+    Object {
+      "type": "String",
+      "value": "udc:escrow:1",
+      "vname": "id",
     },
     Object {
       "type": "Bool",
