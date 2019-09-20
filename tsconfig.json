@@ -1,7 +1,14 @@
 {
   "compilerOptions": {
     "outDir": "build",
-    "module": "commonjs"
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "noImplicitThis": false,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src"]
 }
