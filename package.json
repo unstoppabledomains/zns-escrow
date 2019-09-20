@@ -26,18 +26,22 @@
   },
   "scripts": {
     "build": "tsc",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "test": "jest --config jest.config.js --runInBand"
   },
   "dependencies": {
+    "@types/jest": "^24.0.18",
     "@zilliqa-js/zilliqa": "^0.8.0-alpha.0",
     "chalk": "^2.4.2",
     "namicorn": "^0.2.26",
+    "ts-jest": "^24.1.0",
     "tslib": "^1.10.0",
     "yargs": "^14.0.0"
   },
   "devDependencies": {
     "@types/node": "10",
     "@types/yargs": "^13.0.2",
+    "jest": "^24.9.0",
     "typescript": "^3.6.3"
   }
 }

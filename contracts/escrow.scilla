@@ -18,7 +18,7 @@ let eSuccess = {_eventname: "Success"}
 contract Escrow(
   registry: ByStr20, 
   seller: ByStr20, 
-  buyer: ByStr32, 
+  buyer: ByStr20, 
   escrowedNode: ByStr32,
   price: Uint128
 )
@@ -27,13 +27,13 @@ field sold: Bool = False
 field funderTmp: ByStr20 = 0x0000000000000000000000000000000000000000
 
 transition buy()
-  funderTmp := _sender;
-
   okAmount = builtin eq price _amount;
 
   match okAmount with
   | True =>
     accept;
+
+    funderTmp := _sender;
 
     msgs =
       let m = {
@@ -41,7 +41,7 @@ transition buy()
         _recipient: registry; 
         _amount: Uint128 0;
         node: escrowedNode; 
-        owner: _sender
+        owner: buyer
       } in oneMsg m;
     send msgs
   | False =>
