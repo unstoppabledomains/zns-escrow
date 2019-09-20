@@ -23,6 +23,7 @@ contract Escrow(
   price: Uint128
 )
 
+field id: String = "udc:escrow:1"
 field sold: Bool = False
 field funderTmp: ByStr20 = 0x0000000000000000000000000000000000000000
 

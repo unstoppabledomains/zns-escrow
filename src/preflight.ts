@@ -24,22 +24,22 @@ function preflight<T extends {} = {}>({
   verbose: boolean;
 } & T {
   if (!/^[a-f\d]{64}|[A-F\d]{64}$/.test(privateKey)) {
-    error('bad private key');
+    error('bad private key', true);
   }
 
   let node;
   try {
     node = namehash(domain);
-  } catch (error) {
-    error('bad domain');
+  } catch (err) {
+    error('bad domain', true);
   }
 
   let registryAddress;
   if (registry) {
     try {
       registryAddress = normaliseAddress(registryAddress);
-    } catch (error) {
-      error('bad registry');
+    } catch (err) {
+      error('bad registry', true);
     }
   }
 
@@ -62,10 +62,10 @@ function preflight<T extends {} = {}>({
       } as any;
     }
     // testnet
-    case 111: {
-      if (!registry) {
-        error('must supply registry using testnet');
-      }
+    case 333: {
+      // if (!registry) {
+      //   error('must supply registry using testnet', true);
+      // }
 
       return {
         verbose,
@@ -79,16 +79,16 @@ function preflight<T extends {} = {}>({
       } as any;
     }
     // kaya
-    case 333: {
-      error('cannot use kaya');
+    case 111: {
+      error('cannot use kaya', true);
     }
     default: {
       if (!registry) {
-        error('must supply registry using private chain');
+        error('must supply registry using private chain', true);
       }
 
       if (!url) {
-        error('must supply url using private chain');
+        error('must supply url using private chain', true);
       }
 
       return {
@@ -122,22 +122,22 @@ function deployPreflight(argv) {
     argv,
   );
 
-  let buyerAddress: string;
+  let buyerAddress!: string;
   try {
     buyerAddress = normaliseAddress(buyer);
-  } catch (error) {
-    error('bad buyer');
+  } catch (err) {
+    error('bad buyer', true);
   }
 
-  let sellerAddress: string;
+  let sellerAddress!: string;
   try {
     sellerAddress = normaliseAddress(seller);
-  } catch (error) {
-    error('bad seller');
+  } catch (err) {
+    error('bad seller', true);
   }
 
   if (!Number.isInteger(price) || price < 1) {
-    error('bad price, must be positive integer');
+    error('bad price, must be positive integer', true);
   }
 
   return {
@@ -163,13 +163,14 @@ function depositPreflight(argv) {
     chainId,
     registry,
     escrow,
+    node,
   } = preflight<{escrow: string}>(argv);
 
-  let escrowAddress: string;
+  let escrowAddress!: string;
   try {
     escrowAddress = normaliseAddress(escrow);
-  } catch (error) {
-    error('bad escrow');
+  } catch (err) {
+    error('bad escrow', true);
   }
 
   return {
@@ -180,6 +181,7 @@ function depositPreflight(argv) {
     url,
     chainId,
     registry,
+    node,
   };
 }
 

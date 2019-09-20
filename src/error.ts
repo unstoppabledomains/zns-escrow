@@ -1,4 +1,11 @@
-export default function error(message, code = 1) {
-  console.error('zns-escrow:', message);
-  process.exit(code);
+import cli from './cli';
+
+export default function error(message, showHelp = false) {
+  if (showHelp) {
+    cli.showHelp();
+  }
+
+  console.error('Error:', message);
+
+  process.exit(1);
 }

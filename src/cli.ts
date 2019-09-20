@@ -1,13 +1,18 @@
 import chalk from 'chalk';
-import * as yargs from 'yargs';
 import handleBuy from './handleBuy';
 import handleDeploy from './handleDeploy';
 import handleDeposit from './handleDeposit';
 import handleSell from './handleSell';
+import yargs = require('yargs');
 
-yargs
-  .help()
+export default yargs
+  .help('help')
+  .alias('help', 'h')
   .demandCommand()
+  .middleware(argv => {
+    if (process.env.NODE_ENV === 'development') argv.verbose = true;
+  }, true)
+
   .option('verbose', {
     alias: 'v',
     type: 'boolean',
@@ -37,7 +42,7 @@ yargs
   .command(
     // ['sell <domain>', '$0 <domain>'],
     'sell <domain>',
-    'Deploy escrow contract and deposit name onto contract',
+    'Deploy escrow and deposit name onto contract',
     yargs =>
       yargs
         .positional('domain', {
@@ -106,11 +111,13 @@ yargs
     'Purchase domain from contract',
     yargs =>
       yargs
-        .positional('domain', {describe: 'domain to sell'})
+        .positional('domain', {
+          describe: 'domain to sell',
+        })
         .option('escrow', {
           type: 'string',
           description: 'Escrow contract address',
         })
         .demandOption('escrow'),
     handleBuy,
-  ).argv;
+  );

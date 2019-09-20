@@ -1,1 +1,3 @@
-import './cli';
+import cli from './cli';
+
+cli.argv;

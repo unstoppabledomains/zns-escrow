@@ -1,3 +1,4 @@
+import buy from './actions/buy';
 import {buyPreflight} from './preflight';
 
 export default function handleBuy(argv) {
@@ -9,9 +10,10 @@ export default function handleBuy(argv) {
     url,
     chainId,
     registry,
+    node,
   } = buyPreflight(argv);
 
-  console.log('buy', {
+  return buy({
     escrow,
     privateKey,
     domain,
@@ -19,5 +21,6 @@ export default function handleBuy(argv) {
     url,
     chainId,
     registry,
+    node,
   });
 }

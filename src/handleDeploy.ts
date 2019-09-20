@@ -1,3 +1,4 @@
+import deploy from './actions/deploy';
 import {deployPreflight} from './preflight';
 
 export default function handleDeploy(argv) {
@@ -14,7 +15,7 @@ export default function handleDeploy(argv) {
     seller,
   } = deployPreflight(argv);
 
-  console.log('deploy', {
+  return deploy({
     privateKey,
     domain,
     verbose,
