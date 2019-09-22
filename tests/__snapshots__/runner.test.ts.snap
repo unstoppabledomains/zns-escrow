@@ -1,27 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should buy: buy_success 1`] = `
+exports[`should deposit: deposit_success 1`] = `
 Object {
   "_accepted": "true",
-  "events": Array [],
-  "gas_remaining": "9640",
-  "message": Object {
-    "_amount": "0",
-    "_recipient": "0x3333333333333333333333333333333333333333",
-    "_tag": "transfer",
-    "params": Array [
-      Object {
-        "type": "ByStr32",
-        "value": "0x0000000000000000000000000000000000000000000000000000000000000000",
-        "vname": "node",
-      },
-      Object {
-        "type": "ByStr20",
-        "value": "0x2222222222222222222222222222222222222222",
-        "vname": "owner",
-      },
-    ],
-  },
+  "events": Array [
+    Object {
+      "_eventname": "Deposit",
+      "params": Array [],
+    },
+  ],
+  "gas_remaining": "9753",
+  "message": null,
   "scilla_major_version": "0",
   "states": Array [
     Object {
@@ -30,9 +19,13 @@ Object {
       "vname": "_balance",
     },
     Object {
-      "type": "ByStr20",
-      "value": "0x5555555555555555555555555555555555555555",
-      "vname": "funderTmp",
+      "type": "Bool",
+      "value": Object {
+        "argtypes": Array [],
+        "arguments": Array [],
+        "constructor": "True",
+      },
+      "vname": "deposit",
     },
     Object {
       "type": "String",
@@ -58,16 +51,10 @@ Object {
   "events": Array [
     Object {
       "_eventname": "Error",
-      "params": Array [
-        Object {
-          "type": "String",
-          "value": "Bad _sender",
-          "vname": "message",
-        },
-      ],
+      "params": Array [],
     },
   ],
-  "gas_remaining": "9566",
+  "gas_remaining": "9593",
   "message": null,
   "scilla_major_version": "0",
   "states": Array [
@@ -91,9 +78,13 @@ Object {
       "vname": "sold",
     },
     Object {
-      "type": "ByStr20",
-      "value": "0x0000000000000000000000000000000000000000",
-      "vname": "funderTmp",
+      "type": "Bool",
+      "value": Object {
+        "argtypes": Array [],
+        "arguments": Array [],
+        "constructor": "False",
+      },
+      "vname": "deposit",
     },
   ],
 }
@@ -105,16 +96,10 @@ Object {
   "events": Array [
     Object {
       "_eventname": "Error",
-      "params": Array [
-        Object {
-          "type": "String",
-          "value": "Bad _sender",
-          "vname": "message",
-        },
-      ],
+      "params": Array [],
     },
   ],
-  "gas_remaining": "9566",
+  "gas_remaining": "9593",
   "message": null,
   "scilla_major_version": "0",
   "states": Array [
@@ -138,30 +123,28 @@ Object {
       "vname": "sold",
     },
     Object {
-      "type": "ByStr20",
-      "value": "0x0000000000000000000000000000000000000000",
-      "vname": "funderTmp",
+      "type": "Bool",
+      "value": Object {
+        "argtypes": Array [],
+        "arguments": Array [],
+        "constructor": "False",
+      },
+      "vname": "deposit",
     },
   ],
 }
 `;
 
-exports[`should fail to buy with incorrect price: buy_failure 1`] = `
+exports[`should fail to deposit with incorrect price: deposit_failure 1`] = `
 Object {
   "_accepted": "false",
   "events": Array [
     Object {
       "_eventname": "Error",
-      "params": Array [
-        Object {
-          "type": "String",
-          "value": "Bad _amount",
-          "vname": "message",
-        },
-      ],
+      "params": Array [],
     },
   ],
-  "gas_remaining": "9790",
+  "gas_remaining": "9758",
   "message": null,
   "scilla_major_version": "0",
   "states": Array [
@@ -185,9 +168,13 @@ Object {
       "vname": "sold",
     },
     Object {
-      "type": "ByStr20",
-      "value": "0x0000000000000000000000000000000000000000",
-      "vname": "funderTmp",
+      "type": "Bool",
+      "value": Object {
+        "argtypes": Array [],
+        "arguments": Array [],
+        "constructor": "False",
+      },
+      "vname": "deposit",
     },
   ],
 }
@@ -202,11 +189,11 @@ Object {
       "params": Array [],
     },
   ],
-  "gas_remaining": "9473",
+  "gas_remaining": "9455",
   "message": Object {
     "_amount": "10",
     "_recipient": "0x1111111111111111111111111111111111111111",
-    "_tag": "onEscrowSuccess",
+    "_tag": "",
     "params": Array [],
   },
   "scilla_major_version": "0",
@@ -231,9 +218,13 @@ Object {
       "vname": "id",
     },
     Object {
-      "type": "ByStr20",
-      "value": "0x5555555555555555555555555555555555555555",
-      "vname": "funderTmp",
+      "type": "Bool",
+      "value": Object {
+        "argtypes": Array [],
+        "arguments": Array [],
+        "constructor": "False",
+      },
+      "vname": "deposit",
     },
   ],
 }
@@ -243,12 +234,68 @@ exports[`should refund on transfer fail: onTransferFailure_success 1`] = `
 Object {
   "_accepted": "false",
   "events": Array [],
-  "gas_remaining": "9510",
+  "gas_remaining": "9495",
   "message": Object {
     "_amount": "10",
-    "_recipient": "0x5555555555555555555555555555555555555555",
-    "_tag": "onEscrowFailure",
+    "_recipient": "0x2222222222222222222222222222222222222222",
+    "_tag": "",
     "params": Array [],
+  },
+  "scilla_major_version": "0",
+  "states": Array [
+    Object {
+      "type": "Uint128",
+      "value": "0",
+      "vname": "_balance",
+    },
+    Object {
+      "type": "Bool",
+      "value": Object {
+        "argtypes": Array [],
+        "arguments": Array [],
+        "constructor": "True",
+      },
+      "vname": "deposit",
+    },
+    Object {
+      "type": "String",
+      "value": "udc:escrow:1",
+      "vname": "id",
+    },
+    Object {
+      "type": "Bool",
+      "value": Object {
+        "argtypes": Array [],
+        "arguments": Array [],
+        "constructor": "False",
+      },
+      "vname": "sold",
+    },
+  ],
+}
+`;
+
+exports[`should swap: swap_success 1`] = `
+Object {
+  "_accepted": "false",
+  "events": Array [],
+  "gas_remaining": "9637",
+  "message": Object {
+    "_amount": "0",
+    "_recipient": "0x3333333333333333333333333333333333333333",
+    "_tag": "transfer",
+    "params": Array [
+      Object {
+        "type": "ByStr32",
+        "value": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "vname": "node",
+      },
+      Object {
+        "type": "ByStr20",
+        "value": "0x2222222222222222222222222222222222222222",
+        "vname": "owner",
+      },
+    ],
   },
   "scilla_major_version": "0",
   "states": Array [
@@ -272,9 +319,13 @@ Object {
       "vname": "sold",
     },
     Object {
-      "type": "ByStr20",
-      "value": "0x5555555555555555555555555555555555555555",
-      "vname": "funderTmp",
+      "type": "Bool",
+      "value": Object {
+        "argtypes": Array [],
+        "arguments": Array [],
+        "constructor": "True",
+      },
+      "vname": "deposit",
     },
   ],
 }

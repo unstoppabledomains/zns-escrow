@@ -56,9 +56,9 @@ const init = [
 ];
 
 function createState({
-  _balance = 0,
+  _balance = 0 as number | string,
   sold = false,
-  funderTmp = '0x0000000000000000000000000000000000000000',
+  deposit = false,
 } = {}) {
   return [
     {
@@ -81,9 +81,13 @@ function createState({
       },
     },
     {
-      vname: 'funderTmp',
-      type: 'ByStr20',
-      value: funderTmp,
+      vname: 'deposit',
+      type: 'Bool',
+      value: {
+        constructor: deposit ? 'True' : 'False',
+        argtypes: [],
+        arguments: [],
+      },
     },
   ];
 }
@@ -139,11 +143,11 @@ it('should deploy', () => {
   expect(output.states).toEqual(createState());
 });
 
-it('should buy', () => {
+it('should deposit', () => {
   const message = {
-    _tag: 'buy',
-    _amount: '10',
-    _sender: address,
+    _tag: 'deposit',
+    _amount: price,
+    _sender: buyer,
     params: [],
   };
 
@@ -153,20 +157,46 @@ it('should buy', () => {
   });
 
   expect(output._accepted).toBe('true');
-  expect(output.states.find(v => v.vname === 'funderTmp').value).toBe(address);
+  expect(output.states.find(v => v.vname === 'deposit').value).toEqual({
+    argtypes: [],
+    arguments: [],
+    constructor: 'True',
+  });
+  expect(output.states.find(v => v.vname === '_balance').value).toBe(price);
+  expect(output.message).toBeNull();
+
+  expect(output).toMatchSnapshot('deposit_success');
+});
+
+it('should swap', () => {
+  const message = {
+    _tag: 'swap',
+    _amount: '0',
+    _sender: address,
+    params: [],
+  };
+
+  const output = scillaRun({
+    message,
+    state: createState({
+      deposit: true,
+    }),
+  });
+
+  expect(output.message._recipient).toBe(registry);
+  expect(output.message._tag).toBe('transfer');
   expect(output.message.params.find(v => v.vname === 'owner').value).toBe(
     buyer,
   );
-  expect(output.message._recipient).toBe(registry);
 
-  expect(output).toMatchSnapshot('buy_success');
+  expect(output).toMatchSnapshot('swap_success');
 });
 
-it('should fail to buy with incorrect price', () => {
+it('should fail to deposit with incorrect price', () => {
   const message = {
-    _tag: 'buy',
+    _tag: 'deposit',
     _amount: '1',
-    _sender: address,
+    _sender: buyer,
     params: [],
   };
 
@@ -176,12 +206,16 @@ it('should fail to buy with incorrect price', () => {
   });
 
   expect(output._accepted).toBe('false');
-  expect(output.states.find(v => v.vname === 'funderTmp').value).toBe(
-    '0x0000000000000000000000000000000000000000',
-  );
+  expect(output.states.find(v => v.vname === '_balance').value).toBe('0');
+  expect(output.states.find(v => v.vname === 'deposit').value).toEqual({
+    argtypes: [],
+    arguments: [],
+    constructor: 'False',
+  });
+
   expect(output.message).toBeNull();
 
-  expect(output).toMatchSnapshot('buy_failure');
+  expect(output).toMatchSnapshot('deposit_failure');
 });
 
 it('should payout seller on transfer success', () => {
@@ -197,10 +231,7 @@ it('should payout seller on transfer success', () => {
 
   const output = scillaRun({
     message,
-    state: createState({
-      _balance: Number(price),
-      funderTmp: address,
-    }),
+    state: createState({_balance: price}),
   });
 
   expect(output._accepted).toBe('false');
@@ -209,7 +240,6 @@ it('should payout seller on transfer success', () => {
     arguments: [],
     constructor: 'True',
   });
-  expect(output.states.find(v => v.vname === 'funderTmp').value).toBe(address);
   expect(output.message._recipient).toBe(seller);
   expect(output.message._amount).toBe(price);
 
@@ -252,14 +282,11 @@ it('should refund on transfer fail', () => {
 
   const output = scillaRun({
     message,
-    state: createState({
-      _balance: Number(price),
-      funderTmp: address,
-    }),
+    state: createState({_balance: price}),
   });
 
   expect(output._accepted).toBe('false');
-  expect(output.message._recipient).toBe(address);
+  expect(output.message._recipient).toBe(buyer);
   expect(output.message._amount).toBe(price);
 
   expect(output).toMatchSnapshot('onTransferFailure_success');

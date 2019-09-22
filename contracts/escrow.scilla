@@ -1,53 +1,74 @@
 scilla_version 0
 
+import BoolUtils
+
 library EscrowLib
 
 let nilMessage = Nil {Message}
+let nullByStr20 = 0x0000000000000000000000000000000000000000
 let true = True
+let false = False
 
 let oneMsg =
   fun(msg: Message) =>
     Cons {Message} msg nilMessage
 
-let eError =
-  fun(message: String) =>
-    {_eventname: "Error"; message: message}
-
+let eError = {_eventname: "Error"}
+let eDeposit = {_eventname: "Deposit"}
 let eSuccess = {_eventname: "Success"}
 
 contract Escrow(
-  registry: ByStr20, 
-  seller: ByStr20, 
-  buyer: ByStr20, 
+  registry: ByStr20,
+  seller: ByStr20,
+  buyer: ByStr20,
   escrowedNode: ByStr32,
   price: Uint128
 )
 
 field id: String = "udc:escrow:1"
 field sold: Bool = False
-field funderTmp: ByStr20 = 0x0000000000000000000000000000000000000000
+field deposit: Bool = False
 
-transition buy()
+transition deposit()
   okAmount = builtin eq price _amount;
+  okSender = builtin eq _sender buyer;
+  hasDeposit <- deposit;
+  isSold <- sold;
+  ok =
+    let okSold = negb isSold in
+    let okDeposit = negb hasDeposit in
+    let b1 = andb okSender okAmount in
+    let b2 = andb okDeposit okSold in
+      andb b1 b2;
 
-  match okAmount with
+  match ok with
   | True =>
     accept;
+    deposit := true;
+    event eDeposit
+  | False => event eError
+  end
+end
 
-    funderTmp := _sender;
+transition swap()
+  isSold <- sold;
+  okDeposit <- deposit;
+  ok =
+    let okSold = negb isSold in
+      andb okSold okDeposit;
 
+  match ok with
+  | True =>
     msgs =
       let m = {
-        _tag: "transfer"; 
-        _recipient: registry; 
+        _tag: "transfer";
+        _recipient: registry;
         _amount: Uint128 0;
-        node: escrowedNode; 
+        node: escrowedNode;
         owner: buyer
       } in oneMsg m;
     send msgs
-  | False =>
-    e = let m = "Bad _amount" in eError m;
-    event e
+  | False => event eError
   end
 end
 
@@ -55,23 +76,13 @@ transition onTransferSuccess(node: ByStr32, owner: ByStr20)
   okSender = builtin eq _sender registry;
 
   match okSender with
-  | True => 
+  | True =>
     sold := true;
-
     event eSuccess;
-
     balance <- _balance;
-
-    msgs =
-      let m = {
-        _tag: "onEscrowSuccess"; 
-        _recipient: seller; 
-        _amount: price
-      } in oneMsg m;
+    msgs = let m = {_tag: ""; _recipient: seller; _amount: balance} in oneMsg m;
     send msgs
-  | False =>
-    e = let m = "Bad _sender" in eError m;
-    event e
+  | False => event eError
   end
 end
 
@@ -80,17 +91,10 @@ transition onTransferFailure(node: ByStr32, owner: ByStr20)
 
   match okSender with
   | True =>
-    funder <- funderTmp;
-
-    msgs =
-      let m = {
-        _tag: "onEscrowFailure"; 
-        _recipient: funder; 
-        _amount: price
-      } in oneMsg m;
+    deposit := true;
+    balance <- _balance;
+    msgs = let m = {_tag: ""; _recipient: buyer; _amount: balance} in oneMsg m;
     send msgs
-  | False =>
-    e = let m = "Bad _sender" in eError m;
-    event e
+  | False => event eError
   end
 end

@@ -27,7 +27,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "test": "jest --config jest.config.js --runInBand"
+    "test": "jest --config jest.json --runInBand"
   },
   "dependencies": {
     "@zilliqa-js/zilliqa": "^0.8.0-alpha.0",
