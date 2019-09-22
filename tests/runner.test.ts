@@ -1,16 +1,16 @@
-import {Value} from '@zilliqa-js/contract/src/types';
-import {execSync} from 'child_process';
-import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'fs';
-import {join} from 'path';
+import {Value} from '@zilliqa-js/contract/src/types'
+import {execSync} from 'child_process'
+import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'fs'
+import {join} from 'path'
 
 const node =
-  '0x0000000000000000000000000000000000000000000000000000000000000000';
-const seller = '0x1111111111111111111111111111111111111111';
-const buyer = '0x2222222222222222222222222222222222222222';
-const registry = '0x3333333333333333333333333333333333333333';
-const thisAddress = '0x4444444444444444444444444444444444444444';
-const address = '0x5555555555555555555555555555555555555555';
-const price = '10';
+  '0x0000000000000000000000000000000000000000000000000000000000000000'
+const seller = '0x1111111111111111111111111111111111111111'
+const buyer = '0x2222222222222222222222222222222222222222'
+const registry = '0x3333333333333333333333333333333333333333'
+const thisAddress = '0x4444444444444444444444444444444444444444'
+const address = '0x5555555555555555555555555555555555555555'
+const price = '10'
 
 const init = [
   {
@@ -53,7 +53,7 @@ const init = [
     type: 'BNum',
     value: '0',
   },
-];
+]
 
 function createState({
   _balance = 0 as number | string,
@@ -89,7 +89,7 @@ function createState({
         arguments: [],
       },
     },
-  ];
+  ]
 }
 
 function scillaRun({
@@ -99,29 +99,29 @@ function scillaRun({
   blockchain = [{vname: 'BLOCKNUMBER', type: 'BNum', value: '1'}],
   gaslimit = 10000,
 }: {
-  init?: Value[] | never[];
-  state?: Value[] | never[];
+  init?: Value[] | never[]
+  state?: Value[] | never[]
   message?: {
-    _tag: string;
-    _amount: string;
-    _sender: string;
-    params: Value[] | never[];
-  };
-  blockchain?: Value[];
-  gaslimit?: number | string;
+    _tag: string
+    _amount: string
+    _sender: string
+    params: Value[] | never[]
+  }
+  blockchain?: Value[]
+  gaslimit?: number | string
 } = {}) {
   if (!existsSync('/tmp/zns-escrow')) {
-    mkdirSync('/tmp/zns-escrow');
+    mkdirSync('/tmp/zns-escrow')
   }
 
-  writeFileSync('/tmp/zns-escrow/init.json', JSON.stringify(initArr));
+  writeFileSync('/tmp/zns-escrow/init.json', JSON.stringify(initArr))
   if (state) {
-    writeFileSync('/tmp/zns-escrow/state.json', JSON.stringify(state));
+    writeFileSync('/tmp/zns-escrow/state.json', JSON.stringify(state))
   }
   if (message) {
-    writeFileSync('/tmp/zns-escrow/message.json', JSON.stringify(message));
+    writeFileSync('/tmp/zns-escrow/message.json', JSON.stringify(message))
   }
-  writeFileSync('/tmp/zns-escrow/blockchain.json', JSON.stringify(blockchain));
+  writeFileSync('/tmp/zns-escrow/blockchain.json', JSON.stringify(blockchain))
 
   const result = execSync(`scilla-runner \
       -i ${join(__dirname, '../contracts/escrow.scilla')} \
@@ -132,16 +132,16 @@ function scillaRun({
       -o /tmp/zns-escrow/output.json \
       -gaslimit ${gaslimit} \
       -libdir ${join(__dirname, '../contracts/stdlib')}
-  `);
+  `)
 
-  return JSON.parse(readFileSync('/tmp/zns-escrow/output.json', 'utf8'));
+  return JSON.parse(readFileSync('/tmp/zns-escrow/output.json', 'utf8'))
 }
 
 it('should deploy', () => {
-  const output = scillaRun();
+  const output = scillaRun()
 
-  expect(output.states).toEqual(createState());
-});
+  expect(output.states).toEqual(createState())
+})
 
 it('should deposit', () => {
   const message = {
@@ -149,48 +149,46 @@ it('should deposit', () => {
     _amount: price,
     _sender: buyer,
     params: [],
-  };
+  }
 
   const output = scillaRun({
     message,
     state: createState(),
-  });
+  })
 
-  expect(output._accepted).toBe('true');
+  expect(output._accepted).toBe('true')
   expect(output.states.find(v => v.vname === 'deposit').value).toEqual({
     argtypes: [],
     arguments: [],
     constructor: 'True',
-  });
-  expect(output.states.find(v => v.vname === '_balance').value).toBe(price);
-  expect(output.message).toBeNull();
+  })
+  expect(output.states.find(v => v.vname === '_balance').value).toBe(price)
+  expect(output.message).toBeNull()
 
-  expect(output).toMatchSnapshot('deposit_success');
-});
+  expect(output).toMatchSnapshot('deposit_success')
+})
 
-it('should swap', () => {
+it('should execute', () => {
   const message = {
-    _tag: 'swap',
+    _tag: 'execute',
     _amount: '0',
     _sender: address,
     params: [],
-  };
+  }
 
   const output = scillaRun({
     message,
     state: createState({
       deposit: true,
     }),
-  });
+  })
 
-  expect(output.message._recipient).toBe(registry);
-  expect(output.message._tag).toBe('transfer');
-  expect(output.message.params.find(v => v.vname === 'owner').value).toBe(
-    buyer,
-  );
+  expect(output.message._recipient).toBe(registry)
+  expect(output.message._tag).toBe('transfer')
+  expect(output.message.params.find(v => v.vname === 'owner').value).toBe(buyer)
 
-  expect(output).toMatchSnapshot('swap_success');
-});
+  expect(output).toMatchSnapshot('execute_success')
+})
 
 it('should fail to deposit with incorrect price', () => {
   const message = {
@@ -198,25 +196,25 @@ it('should fail to deposit with incorrect price', () => {
     _amount: '1',
     _sender: buyer,
     params: [],
-  };
+  }
 
   const output = scillaRun({
     message,
     state: createState(),
-  });
+  })
 
-  expect(output._accepted).toBe('false');
-  expect(output.states.find(v => v.vname === '_balance').value).toBe('0');
+  expect(output._accepted).toBe('false')
+  expect(output.states.find(v => v.vname === '_balance').value).toBe('0')
   expect(output.states.find(v => v.vname === 'deposit').value).toEqual({
     argtypes: [],
     arguments: [],
     constructor: 'False',
-  });
+  })
 
-  expect(output.message).toBeNull();
+  expect(output.message).toBeNull()
 
-  expect(output).toMatchSnapshot('deposit_failure');
-});
+  expect(output).toMatchSnapshot('deposit_failure')
+})
 
 it('should payout seller on transfer success', () => {
   const message = {
@@ -227,24 +225,24 @@ it('should payout seller on transfer success', () => {
       {vname: 'owner', type: 'ByStr20', value: buyer},
       {vname: 'node', type: 'ByStr32', value: node},
     ],
-  };
+  }
 
   const output = scillaRun({
     message,
     state: createState({_balance: price}),
-  });
+  })
 
-  expect(output._accepted).toBe('false');
+  expect(output._accepted).toBe('false')
   expect(output.states.find(v => v.vname === 'sold').value).toEqual({
     argtypes: [],
     arguments: [],
     constructor: 'True',
-  });
-  expect(output.message._recipient).toBe(seller);
-  expect(output.message._amount).toBe(price);
+  })
+  expect(output.message._recipient).toBe(seller)
+  expect(output.message._amount).toBe(price)
 
-  expect(output).toMatchSnapshot('onTransferSuccess_success');
-});
+  expect(output).toMatchSnapshot('onTransferSuccess_success')
+})
 
 it('should emit error event on transfer success if not registry', () => {
   const message = {
@@ -255,19 +253,19 @@ it('should emit error event on transfer success if not registry', () => {
       {vname: 'owner', type: 'ByStr20', value: buyer},
       {vname: 'node', type: 'ByStr32', value: node},
     ],
-  };
+  }
 
   const output = scillaRun({
     message,
     state: createState(),
-  });
+  })
 
-  expect(output._accepted).toBe('false');
-  expect(output.message).toBeNull();
-  expect(output.events.find(e => e._eventname === 'Error')).toBeTruthy();
+  expect(output._accepted).toBe('false')
+  expect(output.message).toBeNull()
+  expect(output.events.find(e => e._eventname === 'Error')).toBeTruthy()
 
-  expect(output).toMatchSnapshot('onTransferSuccess_failure');
-});
+  expect(output).toMatchSnapshot('onTransferSuccess_failure')
+})
 
 it('should refund on transfer fail', () => {
   const message = {
@@ -278,19 +276,19 @@ it('should refund on transfer fail', () => {
       {vname: 'owner', type: 'ByStr20', value: buyer},
       {vname: 'node', type: 'ByStr32', value: node},
     ],
-  };
+  }
 
   const output = scillaRun({
     message,
     state: createState({_balance: price}),
-  });
+  })
 
-  expect(output._accepted).toBe('false');
-  expect(output.message._recipient).toBe(buyer);
-  expect(output.message._amount).toBe(price);
+  expect(output._accepted).toBe('false')
+  expect(output.message._recipient).toBe(buyer)
+  expect(output.message._amount).toBe(price)
 
-  expect(output).toMatchSnapshot('onTransferFailure_success');
-});
+  expect(output).toMatchSnapshot('onTransferFailure_success')
+})
 
 it('should emit error event on transfer fail if not registry', () => {
   const message = {
@@ -301,16 +299,16 @@ it('should emit error event on transfer fail if not registry', () => {
       {vname: 'owner', type: 'ByStr20', value: buyer},
       {vname: 'node', type: 'ByStr32', value: node},
     ],
-  };
+  }
 
   const output = scillaRun({
     message,
     state: createState(),
-  });
+  })
 
-  expect(output._accepted).toBe('false');
-  expect(output.message).toBeNull();
-  expect(output.events.find(e => e._eventname === 'Error')).toBeTruthy();
+  expect(output._accepted).toBe('false')
+  expect(output.message).toBeNull()
+  expect(output.events.find(e => e._eventname === 'Error')).toBeTruthy()
 
-  expect(output).toMatchSnapshot('onTransferFailure_success');
-});
+  expect(output).toMatchSnapshot('onTransferFailure_success')
+})

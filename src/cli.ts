@@ -1,123 +1,45 @@
-import chalk from 'chalk';
-import handleBuy from './handleBuy';
-import handleDeploy from './handleDeploy';
-import handleDeposit from './handleDeposit';
-import handleSell from './handleSell';
-import yargs = require('yargs');
+import chalk from 'chalk'
+import yargs = require('yargs')
 
-export default yargs
+const cli = yargs
   .help('help')
   .alias('help', 'h')
   .demandCommand()
+  .options({
+    verbose: {
+      alias: 'v',
+      type: 'boolean',
+      description: 'Run with verbose logging',
+    },
+  })
   .middleware(argv => {
-    if (process.env.NODE_ENV === 'development') argv.verbose = true;
-  }, true)
-
-  .option('verbose', {
-    alias: 'v',
-    type: 'boolean',
-    description: 'Run with verbose logging',
+    if (process.env.NODE_ENV === 'development') argv.verbose = true
+    if (argv.verbose) {
+      console.info()
+      Object.keys(argv).forEach(k => {
+        console.info(k.charAt(0).toUpperCase() + k.slice(1) + ':', argv[k])
+      })
+      console.info()
+    }
   })
-  .option('private-key', {
-    alias: 'k',
-    type: 'string',
-    description: 'Use private key for transactions',
-  })
-  .option('url', {
-    alias: 'u',
-    type: 'string',
-    description: 'Use Url for Zilliqa api',
-  })
-  .option('chain-id', {
-    type: 'number',
-    description: 'Use custom chain id for Zilliqa',
-    default: 1,
-  })
-  .option('registry', {
-    type: 'string',
-    description: 'Use ZNS Registry contract address',
-  })
-  .demandOption('private-key')
+  .commandDir('cmd')
   .epilog('Made with ' + chalk.red('♥') + ' by Unstoppable Domains')
-  .command(
-    // ['sell <domain>', '$0 <domain>'],
-    'sell <domain>',
-    'Deploy escrow and deposit name onto contract',
-    yargs =>
-      yargs
-        .positional('domain', {
-          type: 'string',
-          describe: 'domain to sell',
-        })
-        .option('buyer', {
-          type: 'string',
-          description: 'Buyer address',
-        })
-        .option('price', {
-          type: 'number',
-          description: 'Price to sell at',
-        })
-        .option('qa', {
-          type: 'boolean',
-          description: 'Use Qa instead of Zillings for price',
-        })
-        .option('seller', {
-          type: 'string',
-          description: 'Seller address',
-        })
-        .demandOption(['buyer', 'price']),
-    handleSell,
-  )
-  .command(
-    'deploy <domain>',
-    'Deploy escrow contract',
-    yargs =>
-      yargs
-        .positional('domain', {describe: 'domain to sell'})
-        .option('buyer', {
-          type: 'string',
-          description: 'Buyer address',
-        })
-        .option('price', {
-          type: 'number',
-          description: 'Price to sell at',
-        })
-        .option('qa', {
-          type: 'boolean',
-          description: 'Use Qa instead of Zillings for price',
-        })
-        .option('seller', {
-          type: 'string',
-          description: 'Seller address',
-        })
-        .demandOption(['buyer', 'price']),
-    handleDeploy,
-  )
-  .command(
-    'deposit <domain>',
-    'Deposit domain on contract',
-    yargs =>
-      yargs
-        .positional('domain', {describe: 'domain to sell'})
-        .option('escrow', {
-          type: 'string',
-          description: 'Escrow contract address',
-        })
-        .demandOption('escrow'),
-    handleDeposit,
-  )
-  .command(
-    'buy <domain>',
-    'Purchase domain from contract',
-    yargs =>
-      yargs
-        .positional('domain', {
-          describe: 'domain to sell',
-        })
-        .option('escrow', {
-          type: 'string',
-          description: 'Escrow contract address',
-        })
-        .demandOption('escrow'),
-    handleBuy,
-  );
+  .fail((msg, err) => {
+    if (err || !msg) {
+      console.error('Error:', err.message || 'unknown')
+    } else if (msg.startsWith('Not enough non-option arguments:')) {
+      cli.showHelp()
+      console.error()
+      console.error(msg)
+    } else if (msg.startsWith('Missing required arguments:')) {
+      cli.showHelp()
+      console.error()
+      console.error(msg)
+    } else {
+      console.error(msg)
+    }
+    process.exit(1)
+  })
+  .showHelpOnFail(false)
+
+export default cli

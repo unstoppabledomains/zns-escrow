@@ -135,6 +135,62 @@ Object {
 }
 `;
 
+exports[`should execute: execute_success 1`] = `
+Object {
+  "_accepted": "false",
+  "events": Array [],
+  "gas_remaining": "9634",
+  "message": Object {
+    "_amount": "0",
+    "_recipient": "0x3333333333333333333333333333333333333333",
+    "_tag": "transfer",
+    "params": Array [
+      Object {
+        "type": "ByStr32",
+        "value": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "vname": "node",
+      },
+      Object {
+        "type": "ByStr20",
+        "value": "0x2222222222222222222222222222222222222222",
+        "vname": "owner",
+      },
+    ],
+  },
+  "scilla_major_version": "0",
+  "states": Array [
+    Object {
+      "type": "Uint128",
+      "value": "0",
+      "vname": "_balance",
+    },
+    Object {
+      "type": "String",
+      "value": "udc:escrow:1",
+      "vname": "id",
+    },
+    Object {
+      "type": "Bool",
+      "value": Object {
+        "argtypes": Array [],
+        "arguments": Array [],
+        "constructor": "False",
+      },
+      "vname": "sold",
+    },
+    Object {
+      "type": "Bool",
+      "value": Object {
+        "argtypes": Array [],
+        "arguments": Array [],
+        "constructor": "True",
+      },
+      "vname": "deposit",
+    },
+  ],
+}
+`;
+
 exports[`should fail to deposit with incorrect price: deposit_failure 1`] = `
 Object {
   "_accepted": "false",
@@ -270,62 +326,6 @@ Object {
         "constructor": "False",
       },
       "vname": "sold",
-    },
-  ],
-}
-`;
-
-exports[`should swap: swap_success 1`] = `
-Object {
-  "_accepted": "false",
-  "events": Array [],
-  "gas_remaining": "9637",
-  "message": Object {
-    "_amount": "0",
-    "_recipient": "0x3333333333333333333333333333333333333333",
-    "_tag": "transfer",
-    "params": Array [
-      Object {
-        "type": "ByStr32",
-        "value": "0x0000000000000000000000000000000000000000000000000000000000000000",
-        "vname": "node",
-      },
-      Object {
-        "type": "ByStr20",
-        "value": "0x2222222222222222222222222222222222222222",
-        "vname": "owner",
-      },
-    ],
-  },
-  "scilla_major_version": "0",
-  "states": Array [
-    Object {
-      "type": "Uint128",
-      "value": "0",
-      "vname": "_balance",
-    },
-    Object {
-      "type": "String",
-      "value": "udc:escrow:1",
-      "vname": "id",
-    },
-    Object {
-      "type": "Bool",
-      "value": Object {
-        "argtypes": Array [],
-        "arguments": Array [],
-        "constructor": "False",
-      },
-      "vname": "sold",
-    },
-    Object {
-      "type": "Bool",
-      "value": Object {
-        "argtypes": Array [],
-        "arguments": Array [],
-        "constructor": "True",
-      },
-      "vname": "deposit",
     },
   ],
 }

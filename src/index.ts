@@ -1,3 +1,8 @@
-import cli from './cli';
+import cli from './cli'
 
-cli.argv;
+process.on('SIGINT', () => {
+  console.log('Stopping...')
+  process.exit()
+})
+
+cli.argv

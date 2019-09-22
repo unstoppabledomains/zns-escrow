@@ -50,7 +50,7 @@ transition deposit()
   end
 end
 
-transition swap()
+transition execute()
   isSold <- sold;
   okDeposit <- deposit;
   ok =
@@ -92,6 +92,37 @@ transition onTransferFailure(node: ByStr32, owner: ByStr20)
   match okSender with
   | True =>
     deposit := true;
+    balance <- _balance;
+    msgs = let m = {_tag: ""; _recipient: buyer; _amount: balance} in oneMsg m;
+    send msgs
+  | False => event eError
+  end
+end
+
+transition withdrawDomain()
+  okSender = builtin eq _sender seller;
+
+  match okSender with
+  | True =>
+    msgs =
+      let m = {
+        _tag: "transfer";
+        _recipient: registry;
+        _amount: Uint128 0;
+        node: escrowedNode;
+        owner: seller
+      } in oneMsg m;
+    send msgs
+  | False => event eError
+  end
+end
+
+transition withdrawZillings()
+  okSender = builtin eq _sender buyer;
+
+  match okSender with
+  | True =>
+    deposit := false;
     balance <- _balance;
     msgs = let m = {_tag: ""; _recipient: buyer; _amount: balance} in oneMsg m;
     send msgs
