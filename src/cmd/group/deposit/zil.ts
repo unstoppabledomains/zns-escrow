@@ -10,7 +10,7 @@ import ask from '../../../util/ask'
 import createTransaction from '../../../util/createTransaction'
 import error from '../../../util/error'
 
-export const command = 'zil <domain>'
+export const command = 'zil <escrow> <domain>'
 export const desc = 'Deposit zil onto escrow contract'
 
 export const builder = (yargs: typeof cli) =>

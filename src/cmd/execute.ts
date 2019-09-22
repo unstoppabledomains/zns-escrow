@@ -1,5 +1,5 @@
-import { toBech32Address } from '@zilliqa-js/crypto'
-import { Zilliqa } from '@zilliqa-js/zilliqa'
+import {toBech32Address} from '@zilliqa-js/crypto'
+import {Zilliqa} from '@zilliqa-js/zilliqa'
 import registryOptions from '../builder/registryOptions'
 import zilliqaOptions from '../builder/zilliqaOptions'
 import cli from '../cli'
@@ -10,7 +10,7 @@ import ask from '../util/ask'
 import createTransaction from '../util/createTransaction'
 import error from '../util/error'
 
-export const command = 'execute <escrow> [domain]'
+export const command = 'execute <escrow> <domain>'
 export const desc = 'Execute swap'
 
 export const builder = (yargs: typeof cli) =>

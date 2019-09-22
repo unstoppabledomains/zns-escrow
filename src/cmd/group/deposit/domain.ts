@@ -10,7 +10,7 @@ import ask from '../../../util/ask'
 import createTransaction from '../../../util/createTransaction'
 import error from '../../../util/error'
 
-export const command = 'domain <domain>'
+export const command = 'domain <escrow> <domain>'
 export const desc = 'Deposit domain onto escrow contract'
 
 export const builder = (yargs: typeof cli) =>
@@ -107,19 +107,17 @@ export const handler = async ({
     gasLimit: 5000,
     toAddr: registry,
     data: {
-      _tag: 'approveFor',
+      _tag: 'transfer',
       params: [
-        {
-          vname: 'address',
-          type: 'ByStr20',
-          value: escrow,
-        },
-        {
-          vname: 'isApproved',
-          type: 'Bool',
-          value: {constructor: 'True', argtypes: [], arguments: []},
-        },
+        {vname: 'owner', type: 'ByStr20', value: escrow},
+        {vname: 'node', type: 'ByStr32', value: node},
       ],
+
+      // _tag: 'approveFor',
+      // params: [
+      //   {vname: 'address',type: 'ByStr20',value: escrow},
+      //   {vname: 'isApproved',type: 'Bool',value: {constructor: 'True', argtypes: [], arguments: []}},
+      // ],
     },
   })
 
