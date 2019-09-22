@@ -10,7 +10,7 @@ import ask from '../../../util/ask'
 import createTransaction from '../../../util/createTransaction'
 import error from '../../../util/error'
 
-export const command = 'domain <escrow> <domain>'
+export const command = 'domain <escrow> [domain]'
 export const desc = 'Deposit domain onto escrow contract'
 
 export const builder = (yargs: typeof cli) =>
@@ -27,7 +27,6 @@ export const builder = (yargs: typeof cli) =>
     .options(zilliqaOptions)
     .demandOption('private-key')
     .options(registryOptions)
-    .demandOption('registry')
     .middleware([zilliqaPreflight(true), domainPreflight, escrowPreflight])
 
 export const handler = async ({
@@ -77,7 +76,7 @@ export const handler = async ({
     error(`'${domain}' on a different registry`)
   }
 
-  if (init.escrowedNode !== node) {
+  if (node && init.escrowedNode !== node) {
     error("wrong escrow contract, domains don't match")
   }
 

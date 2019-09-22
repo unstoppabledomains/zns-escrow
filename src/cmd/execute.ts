@@ -10,7 +10,7 @@ import ask from '../util/ask'
 import createTransaction from '../util/createTransaction'
 import error from '../util/error'
 
-export const command = 'execute <escrow> <domain>'
+export const command = 'execute <escrow> [domain]'
 export const desc = 'Execute swap'
 
 export const builder = (yargs: typeof cli) =>
@@ -27,7 +27,6 @@ export const builder = (yargs: typeof cli) =>
     .options(zilliqaOptions)
     .demandOption('private-key')
     .options(registryOptions)
-    .demandOption('registry')
     .middleware([zilliqaPreflight(true), domainPreflight, escrowPreflight])
 
 export const handler = async ({
@@ -85,7 +84,7 @@ export const handler = async ({
     error(`no ZIL deposited on '${domain}'`)
   }
 
-  if (init.escrowedNode !== node) {
+  if (node && init.escrowedNode !== node) {
     error("wrong escrow contract, domains don't match")
   }
 
