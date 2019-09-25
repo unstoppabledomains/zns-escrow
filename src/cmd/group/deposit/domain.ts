@@ -106,17 +106,11 @@ export const handler = async ({
     gasLimit: 5000,
     toAddr: registry,
     data: {
-      _tag: 'transfer',
+      _tag: 'approve',
       params: [
-        {vname: 'owner', type: 'ByStr20', value: escrow},
         {vname: 'node', type: 'ByStr32', value: node},
+        {vname: 'address', type: 'ByStr20', value: escrow},
       ],
-
-      // _tag: 'approveFor',
-      // params: [
-      //   {vname: 'address',type: 'ByStr20',value: escrow},
-      //   {vname: 'isApproved',type: 'Bool',value: {constructor: 'True', argtypes: [], arguments: []}},
-      // ],
     },
   })
 

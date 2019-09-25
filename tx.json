@@ -1,0 +1,31 @@
+{
+  "id": "1",
+  "jsonrpc": "2.0",
+  "result": {
+    "ID": "ef0aba56e8d0d198e69b57df4ad0663bd344e432080c57fac71661fed135c97b",
+    "amount": "0",
+    "data": "{\"_tag\":\"set\",\"params\":[{\"vname\":\"key\",\"type\":\"String\",\"value\":\"crypto.ZIL.address\"},{\"vname\":\"value\",\"type\":\"String\",\"value\":\"zil1wx52hyrlt0g4rrlgnv4fx2seya5gv3tel6vymq\"},{\"vname\":\"address\",\"type\":\"ByStr32\",\"value\":\"0x68c5d3da9f0cb87a6e85dc41abe45af31a221ac5\"}]}",
+    "gasLimit": "5000",
+    "gasPrice": "1000000000",
+    "nonce": "100",
+    "receipt": {
+      "cumulative_gas": "1259",
+      "epoch_num": "243645",
+      "event_logs": [
+        {
+          "_eventname": "Error",
+          "address": "0x68c5d3da9f0cb87a6e85dc41abe45af31a221ac5",
+          "params": [
+            {"type": "Uint64", "value": "1", "vname": "code"},
+            {"type": "String", "value": "Sender not owner", "vname": "message"}
+          ]
+        }
+      ],
+      "success": true
+    },
+    "senderPubKey": "0x02C13E72CA89A5E9E52562CC7C5575A624AE6405D6684DBCDCB4A5FB28831245FC",
+    "signature": "0xA0E2B6910E0D2C443D1D5837A240C758C4B495F65AB8194221DE64DEF2FAA6E2D6AAB0B2F0B069D27936BD0080D280A74057AFD560E4E5290C533B32ED9EE02C",
+    "toAddr": "4887fb6920a8ae50886543ee8aa504da6c9f83bf",
+    "version": "65537"
+  }
+}
