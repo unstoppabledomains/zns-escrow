@@ -24,58 +24,35 @@ zns-escrow --help
 
 #### Sellers
 
-Deploy escrow and deposit domain.
-
-```
-buyer_address=0x1234567890123456789012345678901234567890
-seller_private_key=$(cat seller_private_key.txt)
-domain=any.zil
-
-zns-escrow sell \
-  --domain $domain \
-  --buyer $buyer_address \
-  --price 1 --qa \
-  --private-key $seller_private_key
-```
-
-##### Or if you want to separate these steps.
-
 Deploy the contract.
 
-```
-buyer_address=0x1234567890123456789012345678901234567890
-seller_private_key=$(cat seller_private_key.txt)
-domain=any.zil
-
-zns-escrow deploy \
-  --domain $domain \
-  --buyer $buyer_address \
+```sh
+zns-escrow deploy any.zil \
+  --buyer zil1zg69v7yszg69v7yszg69v7yszg69v7ysrug0xt \
   --price 1 --qa \
-  --private-key $seller_private_key
+  --private-key $(cat seller_private_key.txt)
 ```
 
 Then escrow the domain.
 
-```
-escrow_address=0x1234567890123456789012345678901234567890
-seller_private_key=$(cat seller_private_key.txt)
-
-zns-escrow deposit \
-  --escrow-address $escrow_address \
-  --private-key $seller_private_key
+```sh
+zns-escrow deposit domain zil1zg69v7yszg69v7yszg69v7yszg69v7ysrug0xt --private-key $(cat seller_private_key.txt)
 ```
 
 #### Buyers
 
-Purchase an escrowed domain.
+Deposit an escrowed domain.
 
 ```
-escrow_address=0x1234567890123456789012345678901234567890
-buyer_private_key=$(cat buyer_private_key.txt)
+zns-escrow deposit zil zil1zg69v7yszg69v7yszg69v7yszg69v7ysrug0xt --private-key $(cat buyer_private_key.txt)
+```
 
-zns-escrow buy \
-  --escrow-address $escrow_address \
-  --private-key $buyer_private_key
+Then execute the escrow.
+
+Deposit an escrowed domain.
+
+```
+zns-escrow exchange zil1zg69v7yszg69v7yszg69v7yszg69v7ysrug0xt --private-key $(cat buyer_private_key.txt)
 ```
 
 ## Additional Information
@@ -87,5 +64,3 @@ zns-escrow buy \
 
 - [Scilla Toolchain](https://github.com/Zilliqa/scilla)
   - [Docs](https://scilla.readthedocs.io/)
-
-## Scilla Contract
