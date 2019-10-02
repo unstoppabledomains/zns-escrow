@@ -24,6 +24,11 @@
     "name": "Braden Pezeshki",
     "email": "braden@unstoppabledomains.com"
   },
+  "files": [
+    "build",
+    "contracts",
+    "bin"
+  ],
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",

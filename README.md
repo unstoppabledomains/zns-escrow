@@ -20,40 +20,7 @@ For detailed instructions on how to use the cli. Use
 zns-escrow --help
 ```
 
-### Example
-
-#### Sellers
-
-Deploy the contract.
-
-```sh
-zns-escrow deploy any.zil \
-  --buyer zil1zg69v7yszg69v7yszg69v7yszg69v7ysrug0xt \
-  --price 1 --qa \
-  --private-key $(cat seller_private_key.txt)
-```
-
-Then escrow the domain.
-
-```sh
-zns-escrow deposit domain zil1zg69v7yszg69v7yszg69v7yszg69v7ysrug0xt --private-key $(cat seller_private_key.txt)
-```
-
-#### Buyers
-
-Deposit an escrowed domain.
-
-```
-zns-escrow deposit zil zil1zg69v7yszg69v7yszg69v7yszg69v7ysrug0xt --private-key $(cat buyer_private_key.txt)
-```
-
-Then execute the escrow.
-
-Deposit an escrowed domain.
-
-```
-zns-escrow exchange zil1zg69v7yszg69v7yszg69v7yszg69v7ysrug0xt --private-key $(cat buyer_private_key.txt)
-```
+For a more detailed look at the escrow contracts, Check out out Medium.
 
 ## Additional Information
 
@@ -63,4 +30,5 @@ zns-escrow exchange zil1zg69v7yszg69v7yszg69v7yszg69v7ysrug0xt --private-key $(c
 ## Development Requirements
 
 - [Scilla Toolchain](https://github.com/Zilliqa/scilla)
+
   - [Docs](https://scilla.readthedocs.io/)
