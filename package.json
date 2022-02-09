@@ -38,7 +38,7 @@
   "dependencies": {
     "@zilliqa-js/zilliqa": "^0.8.0-alpha.0",
     "chalk": "^2.4.2",
-    "namicorn": "^0.2.26",
+    "namicorn": "^0.2.38",
     "tslib": "^1.10.0",
     "winston": "^3.2.1",
     "yargs": "^14.0.0"
